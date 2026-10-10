@@ -13,12 +13,14 @@ public class CityCabFareMeter {
         abstract double ratePerKm();
         abstract String type();
         double fare(String time) {
-            double fare = Math.max(100.0, km * ratePerKm());
+            double baseFare = Math.max(100.0, km * ratePerKm());
             if (time.equals("NIGHT")) {
-                if (!(this instanceof NightService)) return -1;
-                fare = ((NightService) this).applyNightFare(fare);
+                if (this instanceof NightService) {
+                    return ((NightService) this).applyNightFare(baseFare);
+                }
+                return -1;
             }
-            return fare;
+            return baseFare;
         }
     }
 
