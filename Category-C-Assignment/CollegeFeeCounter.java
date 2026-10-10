@@ -13,8 +13,11 @@ public class CollegeFeeCounter {
         abstract double tuition();
         double otherFees() { return 0; }
         double totalFee() {
-            return tuition() + otherFees()
-                    + (this instanceof BusUser ? ((BusUser) this).transportFee() : 0);
+            return tuition() + otherFees() + transportFeeFor(this);
+        }
+        private static double transportFeeFor(Student student) {
+            if (student instanceof BusUser) return ((BusUser) student).transportFee();
+            return 0;
         }
     }
 
