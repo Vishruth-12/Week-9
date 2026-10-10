@@ -14,8 +14,8 @@ public class HomeApplianceEnergyReport {
         abstract String type();
         boolean supportsSaver() { return this instanceof SaverMode; }
         double units(boolean saver) {
-            double units = powerWatts() * hours / 1000.0;
-            return saver ? units * ((SaverMode) this).saverFactor() : units;
+            double rawUnits = powerWatts() * hours / 1000.0;
+            return saver ? rawUnits * ((SaverMode) this).saverFactor() : rawUnits;
         }
     }
 
@@ -63,7 +63,7 @@ public class HomeApplianceEnergyReport {
                 case "WASHER": appliance = new Washer(hours); break;
                 default: throw new IllegalArgumentException("Unknown appliance type: " + type);
             }
-            if (saver && !appliance.supportsSaver()) {
+            if (saver && !(appliance instanceof SaverMode)) {
                 System.out.println(appliance.type() + ": saver mode not supported");
                 continue;
             }
